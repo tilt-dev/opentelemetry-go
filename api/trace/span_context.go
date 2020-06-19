@@ -61,6 +61,21 @@ func (t ID) IsValid() bool {
 func (t ID) MarshalJSON() ([]byte, error) {
 	return json.Marshal(t.String())
 }
+func (t ID) UnmarshalJSON(b []byte) error {
+	var s string
+	err := json.Unmarshal(b, &s)
+	if err != nil {
+		return err
+	}
+	rawBytes, err := hex.DecodeString(s)
+	if err != nil {
+		return err
+	}
+	for i := 0; i < 16; i++ {
+		t[i] = rawBytes[i]
+	}
+	return nil
+}
 
 // String returns the hex string representation form of a TraceID
 func (t ID) String() string {
@@ -83,6 +98,22 @@ func (s SpanID) IsValid() bool {
 // as a hex string.
 func (s SpanID) MarshalJSON() ([]byte, error) {
 	return json.Marshal(s.String())
+}
+
+func (t SpanID) UnmarshalJSON(b []byte) error {
+	var s string
+	err := json.Unmarshal(b, &s)
+	if err != nil {
+		return err
+	}
+	rawBytes, err := hex.DecodeString(s)
+	if err != nil {
+		return err
+	}
+	for i := 0; i < 8; i++ {
+		t[i] = rawBytes[i]
+	}
+	return nil
 }
 
 // String returns the hex string representation form of a SpanID

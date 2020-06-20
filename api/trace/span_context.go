@@ -61,7 +61,7 @@ func (t ID) IsValid() bool {
 func (t ID) MarshalJSON() ([]byte, error) {
 	return json.Marshal(t.String())
 }
-func (t ID) UnmarshalJSON(b []byte) error {
+func (t *ID) UnmarshalJSON(b []byte) error {
 	var s string
 	err := json.Unmarshal(b, &s)
 	if err != nil {
@@ -100,7 +100,7 @@ func (s SpanID) MarshalJSON() ([]byte, error) {
 	return json.Marshal(s.String())
 }
 
-func (t SpanID) UnmarshalJSON(b []byte) error {
+func (t *SpanID) UnmarshalJSON(b []byte) error {
 	var s string
 	err := json.Unmarshal(b, &s)
 	if err != nil {

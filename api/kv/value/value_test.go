@@ -15,15 +15,36 @@
 package value_test
 
 import (
+	"encoding/json"
 	"testing"
 	"unsafe"
 
 	"go.opentelemetry.io/otel/api/kv"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/stretchr/testify/assert"
 
 	"go.opentelemetry.io/otel/api/kv/value"
 )
+
+func TestSerialize(t *testing.T) {
+	vals := []value.Value{
+		value.Bool(true),
+		value.String("XXX"),
+		value.Int32(1),
+		value.Float32(0.5),
+	}
+
+	for _, v := range vals {
+		b, err := json.Marshal(v)
+		assert.NoError(t, err)
+
+		var newV value.Value
+		err = json.Unmarshal(b, &newV)
+		assert.NoError(t, err)
+		assert.Equal(t, v, newV)
+	}
+}
 
 func TestValue(t *testing.T) {
 	k := kv.Key("test")

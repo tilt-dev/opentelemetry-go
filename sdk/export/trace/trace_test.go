@@ -3,7 +3,6 @@ package trace
 import (
 	"bytes"
 	"encoding/json"
-	"log"
 	"testing"
 	"time"
 
@@ -31,7 +30,6 @@ func TestSerialize(t *testing.T) {
 	decoder := json.NewDecoder(b)
 	err = decoder.Decode(&outSpan)
 	assert.NoError(t, err)
-	log.Printf("OUT SPAN %+v\n", outSpan)
 
 	b2 := bytes.NewBuffer(nil)
 	encoder2 := json.NewEncoder(b2)

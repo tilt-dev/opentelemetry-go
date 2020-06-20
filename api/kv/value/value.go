@@ -242,3 +242,33 @@ func (v Value) MarshalJSON() ([]byte, error) {
 	jsonVal.Value = v.AsInterface()
 	return json.Marshal(jsonVal)
 }
+
+func (v *Value) UnmarshalJSON(b []byte) error {
+	var jsonVal struct {
+		Type  string
+		Value interface{}
+	}
+	err := json.Unmarshal(b, &jsonVal)
+	if err != nil {
+		return err
+	}
+	switch jsonVal.Type {
+	case "BOOL":
+		*v = Bool(jsonVal.Value.(bool))
+	case "INT32":
+		*v = Int32(int32(jsonVal.Value.(float64)))
+	case "INT64":
+		*v = Int64(int64(jsonVal.Value.(float64)))
+	case "UINT32":
+		*v = Uint32(uint32(jsonVal.Value.(float64)))
+	case "UINT64":
+		*v = Uint64(uint64(jsonVal.Value.(float64)))
+	case "FLOAT32":
+		*v = Float32(float32(jsonVal.Value.(float64)))
+	case "FLOAT64":
+		*v = Float64(float64(jsonVal.Value.(float64)))
+	case "STRING":
+		*v = String(jsonVal.Value.(string))
+	}
+	return nil
+}
